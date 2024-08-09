@@ -1,0 +1,16 @@
+{
+  "name": "simple-social-media",
+  "version": "1.0.0",
+  "description": "my first social media app (ssm)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+    
+  },
+  "type": "module",
+  "author": "dehorla tech",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
