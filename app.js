@@ -22,9 +22,9 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
     console.log("this sever is running on port: ", PORT )});
 
-app.get("/status", (req, res) => {
+app.get("/SSM", (req, res) => {
      const status = {
-        "status": "Running"
+        "status": "Welcome to SSM"
      };
      res.send(status);
 });
