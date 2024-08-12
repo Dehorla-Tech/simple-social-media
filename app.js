@@ -4,6 +4,7 @@ import "dotenv/config";
 import express  from "express"; 
 import {router} from "./Routes/auth.js";
 import {connectDB} from "./config/db.js"
+import _private from "./Routes/private.js";
 
 
 //  // connect DB
@@ -14,7 +15,9 @@ const app = express();
 
 app.use(express.json());
 
+
 app.use("/api/auth", router)
+app.use("/api/private", _private)
 
 
 const PORT = process.env.PORT || 3000;

@@ -1,17 +1,20 @@
 import jwt from "jsonwebtoken";
-import User from "../models/user";
+import User from "../models/user.js";
 
 
 export async function protect(req, res, next) {
    let token;
      //     checking for token in the authorization header
- if (req.headers.authorization && req.headers.authorization.startswith("Bearer"))  {
-    token = req.headers.authorization.split(" ")[1];
+ if (req.headers.authorization && req.headers.authorization.startsWith("Bearer"))  {
+    token = req.headers.authorization.split(" ")[1]
  } 
 
-     //   error response for token not found
+     //   error response for token not found 
  if (!token) {
-    return res.status(401).json({error: "unauthorized access"});
+    return res.status(401).json({
+      success:false,
+      error: "unauthorized access"
+   });
  }
 
 
@@ -33,4 +36,6 @@ export async function protect(req, res, next) {
     // for other unexpected errors
     return next(error)
  }
-}
+};
+
+

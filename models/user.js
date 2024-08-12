@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     password:{
         type: String,
         require: [true, "please provide a valid password"],
-        minlenght: 6     
+        minlength: 6     
     }
 });
     //  hashing password
