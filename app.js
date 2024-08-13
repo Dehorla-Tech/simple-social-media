@@ -5,6 +5,7 @@ import express  from "express";
 import {router} from "./Routes/auth.js";
 import {connectDB} from "./config/db.js"
 import _private from "./Routes/private.js";
+import errorHandler from "./middleware/errorhandler.js";
 
 
 //  // connect DB
@@ -18,6 +19,9 @@ app.use(express.json());
 
 app.use("/api/auth", router)
 app.use("/api/private", _private)
+
+// error handler
+app.use(errorHandler);
 
 
 const PORT = process.env.PORT || 3000;

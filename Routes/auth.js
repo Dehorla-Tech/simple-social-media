@@ -1,5 +1,6 @@
 import express, { Router } from "express";
 import User from "../models/user.js";
+import ErrorResponse from "../utils/errorResponse.js";
 
 const router = express.Router();
 let register;
@@ -11,8 +12,7 @@ router.route("/register").post(register = async (req, res, next) =>{
       ////// checking if email already exist
       const existingUser = await User.findOne({email: req.body.email})
       if (existingUser){
-         res.status(400).json({error: "Email already exists"});
-         return;
+         return next(new ErrorResponse("Email already exists", 400))
       }
     //   registering new user
     const user = await User.create({
@@ -34,18 +34,18 @@ router.route("/login").post(login = async (req, res, next) => {
     try{
     // checking if email and password exists
     if (!email || !password){
-        return res.status(401).json({error: "please provide a valid credentials"})
+        return next(new ErrorResponse("please provide a valid credentials", 401))
     }
     const user = await User.findOne({email}).select("+password");
 
     if (!user){
-        return res.status(401).json({error: "invalid credentials"})
+        return next(new ErrorResponse("Invalid credentials", 401))
     }
     // comparing if password matches
     const passwordMatch = await user.matchPasswords(password);
 
     if (!passwordMatch){
-        return res.status(404).json({success: false, error: "Incorrect password"})
+        return next(new ErrorResponse("Incorrect password", 404))
     }
     sendToken(user, 200, res);
 

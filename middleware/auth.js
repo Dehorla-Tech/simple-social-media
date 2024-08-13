@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
+import ErrorResponse from "../utils/errorResponse.js";
 
 
 export async function protect(req, res, next) {
@@ -11,10 +12,7 @@ export async function protect(req, res, next) {
 
      //   error response for token not found 
  if (!token) {
-    return res.status(401).json({
-      success:false,
-      error: "unauthorized access"
-   });
+   return next(new ErrorResponse("unauthorized access", 401))
  }
 
 
@@ -26,7 +24,7 @@ export async function protect(req, res, next) {
     const user = await User.findById(decoded.id);
 
     if (!user) {
-        return res.status(404).json({ error: "no user found with this ID"});
+      return next(new ErrorResponse("no user found with this ID", 404))
     }
     req.user = user;
     next();
