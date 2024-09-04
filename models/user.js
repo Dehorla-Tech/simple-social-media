@@ -16,6 +16,16 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: [true, "please provide a valid password"],
         minlength: 6     
+    },
+    bio: {
+        type: String
+    },
+    profilePic: {
+        type: String
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 });
     //  hashing password
