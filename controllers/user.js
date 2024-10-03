@@ -28,6 +28,9 @@ export async function userProfile(req, res, next) {
     sendResponse(user, 200, res)
 
   } catch (error) {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return next( new ErrorResponse("CastError: invalid user id", 500))
+  }
     next(error)
   }
 }
@@ -48,6 +51,9 @@ export async function update(req, res, next) {
     sendResponse(user, 200, res)
 
   } catch (error) {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return next( new ErrorResponse("CastError: invalid user id", 500))
+  }
   next(error)
   }
   
