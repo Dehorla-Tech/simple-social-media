@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
     profilePic: {
         type: String
     },
+    posts: [{
+        type: mongoose.Schema.Types.ObjectId,  //Reference to post model
+        ref: "Post"
+    }],
     createdAt: {
         type: Date,
         default: Date.now
