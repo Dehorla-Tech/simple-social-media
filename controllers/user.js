@@ -1,4 +1,4 @@
-import mongoose, { isValidObjectId } from "mongoose";
+import mongoose from "mongoose";
 import User from "../models/user.js";
 import ErrorResponse from "../utils/errorResponse.js";
 
