@@ -5,7 +5,7 @@ import ErrorResponse from "../utils/errorResponse.js";
 
  
       // Fetch all users profile
-export async function profiles(req, res, next) {
+export async function allProfiles(req, res, next) {
     try {
       const users = await User.find({}, {password: 0})
       const countCreatedUsers = await User.estimatedDocumentCount()
@@ -37,7 +37,7 @@ export async function userProfile(req, res, next) {
 
 
         // updated a user by id
-export async function update(req, res, next) {
+export async function updateUser(req, res, next) {
   try {
     const {username, email, bio, profilePic} = req.body;
     let myId = req.params.id;
@@ -57,6 +57,23 @@ export async function update(req, res, next) {
   next(error)
   }
   
+}
+
+ //delete a user by id
+ export async function deleteUser (req, res, next) {
+  try {
+      const user = await User.findByIdAndDelete(req.params.id)
+      if (!user) {
+          return next(new ErrorResponse("user not found", 404))
+      }
+
+      sendResponse("user successfully deleted", 200, res)
+  } catch (error) {
+      if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+          return next(new ErrorResponse("CastError: invalid user id", 500))
+      }
+      next(error)
+  }
 }
 
 const sendResponse = (user, statusCode, res) => {
