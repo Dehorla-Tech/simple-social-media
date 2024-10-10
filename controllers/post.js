@@ -7,7 +7,7 @@ import User from "../models/user.js";
             //   fetch all post
 export async function allPost(req, res, next) {
     try {
-        const posts = await Post.find().populate("author");
+        const posts = await Post.find().populate("author", "username email ");
         const countCreatedPosts = await Post.estimatedDocumentCount()
         console.log(countCreatedPosts);
 
@@ -18,7 +18,7 @@ export async function allPost(req, res, next) {
     }
 }
               // creating a new post
-export async function post (req, res, next) {
+export async function createPost (req, res, next) {
     const {content, image, userId} = req.body;
 
     try { 
@@ -51,25 +51,61 @@ export async function post (req, res, next) {
     }
 }
 
-       // getting post by postId 
+       // getting a single post by postId 
 export async function getPost(req, res, next){
     try {
-        const post = await Post.findById(req.params.id).populate("author")
+        const post = await Post.findById(req.params.id).populate("author", "username email ")
         if (!post) {
             return next(new ErrorResponse("Post not found", 404))
         }
         sendResponse(post, 200, res)
     } catch (error) {
         if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return next (new ErrorResponse("CastError: invalid user id", 500))
+            return next (new ErrorResponse("CastError: invalid post id", 500))
         }
         next(error)
     } 
 }
 
-const sendResponse = (savedPost, statusCode, res) => {
+       //update a post by id
+export async function updatePost(req, res, next) {
+    const {content, image} = req.body;
+    let myId = req.params.id;
+    let newValue = {content, image};
+    try {
+        const post = await Post.findByIdAndUpdate(myId, newValue, {new: true, runValidators: true}).populate("author", "username email")
+        if (!post) {
+            return next(new ErrorResponse("Post not found", 404))
+        }
+
+        sendResponse(post, 200, res)
+    } catch (error) {
+        if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return next(new ErrorResponse("CastError: invalid post id", 500))
+        }
+        next(error)
+    }
+}
+
+       //delete a post by id
+export async function deletePost (req, res, next) {
+    try {
+        const post = await Post.findByIdAndDelete(req.params.id)
+        if (!post) {
+            return next(new ErrorResponse("post not found", 404))
+        }
+
+        sendResponse("post successfully deleted", 200, res)
+    } catch (error) {
+        if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return next(new ErrorResponse("CastError: invalid post id", 500))
+        }
+        next(error)
+    }
+}
+const sendResponse = (Post, statusCode, res) => {
     res.status(statusCode).json({
         success: true, 
-        savedPost
+        Post
     })
 }
