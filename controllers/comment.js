@@ -32,13 +32,67 @@ export async function createComment (req, res, next) {
         sendResponse(savedComment, 201, res);
 
     } catch (error) {
-       if (!mongoose.Types.ObjectId.isValid(authorId)) {
-            return next( new ErrorResponse("CastError: invalid user id", 500))
+       if (!mongoose.Types.ObjectId.isValid(authorId) || !mongoose.Types.ObjectId.isValid(postId)) {
+            return next( new ErrorResponse("CastError: invalid user or post id", 500))
         }
       next(error) 
     }
 }
 
+             //get all comments for a post
+export async function getComment(req, res, next) {
+    try {
+        const postId = req.params.postId;
+        const post = await Post.findById(postId);
+        const comment = await Comment.find({post: postId})
+        .populate("author", "username email")
+         if(!post) {
+            return next(new ErrorResponse("comment not found", 404))
+         }
+         const countComment = await Comment.estimatedDocumentCount()
+         console.log(countComment);
+         
+        sendResponse(comment, 200, res);
+    } catch (error) {
+        if (!mongoose.Types.ObjectId.isValid(req.params.postId)) {
+             return next(new ErrorResponse("CastError: invalid post id", 500))
+        }
+        next(error)
+    }
+}
+
+export async function updateComment (req, res, next) {
+    const {content} = req.body;
+    const myId = req.params.id;
+    const newValue = {content}
+    try{
+        const comment = await Comment.findByIdAndUpdate(myId, newValue, {new: true, runValidators: true});
+        if (!comment){
+            return next(new ErrorResponse("comment not found", 404))
+        }
+        sendResponse(comment, 200, res);
+    } catch(error) {
+        if(!mongoose.Types.ObjectId.isValid(myId)){
+            return next(new ErrorResponse("CastError: invalid comment id", 500))
+        }
+        next(error)
+    }
+}
+
+export async function deleteComment(req, res, next) {
+    try {
+        const comment = await Comment.findByIdAndDelete(req.params.id)
+        if(!comment){
+            return next(new ErrorResponse("comment not found", 404))
+        }
+        sendResponse("comment deleted successfully", 200, res)
+    } catch (error) {
+        if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+            return next(new ErrorResponse("CastError: invalid comment id", 500))
+        }
+        next(error)
+    }
+}
 
 const sendResponse = (comment, statusCode, res) => {
     res.status(statusCode).json({
