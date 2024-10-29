@@ -32,9 +32,6 @@ export async function createComment (req, res, next) {
         sendResponse(savedComment, 201, res);
 
     } catch (error) {
-       if (!mongoose.Types.ObjectId.isValid(authorId) || !mongoose.Types.ObjectId.isValid(postId)) {
-            return next( new ErrorResponse("CastError: invalid user or post id", 500))
-        }
       next(error) 
     }
 }
@@ -54,9 +51,6 @@ export async function getComment(req, res, next) {
          
         sendResponse(comment, 200, res);
     } catch (error) {
-        if (!mongoose.Types.ObjectId.isValid(req.params.postId)) {
-             return next(new ErrorResponse("CastError: invalid post id", 500))
-        }
         next(error)
     }
 }
@@ -72,9 +66,6 @@ export async function updateComment (req, res, next) {
         }
         sendResponse(comment, 200, res);
     } catch(error) {
-        if(!mongoose.Types.ObjectId.isValid(myId)){
-            return next(new ErrorResponse("CastError: invalid comment id", 500))
-        }
         next(error)
     }
 }
@@ -87,9 +78,6 @@ export async function deleteComment(req, res, next) {
         }
         sendResponse("comment deleted successfully", 200, res)
     } catch (error) {
-        if(!mongoose.Types.ObjectId.isValid(req.params.id)){
-            return next(new ErrorResponse("CastError: invalid comment id", 500))
-        }
         next(error)
     }
 }

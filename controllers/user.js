@@ -28,10 +28,7 @@ export async function userProfile(req, res, next) {
     sendResponse(user, 200, res)
 
   } catch (error) {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return next( new ErrorResponse("CastError: invalid user id", 500))
-  }
-    next(error)
+      next(error)
   }
 }
 
@@ -51,10 +48,7 @@ export async function updateUser(req, res, next) {
     sendResponse(user, 200, res)
 
   } catch (error) {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return next( new ErrorResponse("CastError: invalid user id", 500))
-  }
-  next(error)
+    next(error)
   }
   
 }
@@ -69,9 +63,6 @@ export async function updateUser(req, res, next) {
 
       sendResponse("user successfully deleted", 200, res)
   } catch (error) {
-      if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
-          return next(new ErrorResponse("CastError: invalid user id", 500))
-      }
       next(error)
   }
 }

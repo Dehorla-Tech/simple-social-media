@@ -24,6 +24,13 @@ const errorHandler = (err, req, res, next) => {
         console.log(error);
     }
 
+    if (err.name=== "CastError") {
+        const message = "CastError: invalid id parsed";
+        error = new ErrorResponse(message, 500)
+        console.log(error);
+       
+    }
+
     res.status(error.statusCode || 500).json({
         success: false,
         error: error.message || "server error",

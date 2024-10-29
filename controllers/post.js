@@ -44,9 +44,6 @@ export async function createPost (req, res, next) {
         sendResponse(savedPost, 201, res)
 
     } catch (error) {
-        if (!mongoose.Types.ObjectId.isValid(userId)) {
-            return next( new ErrorResponse("CastError: invalid user id", 500))
-        }
         next(error)
     }
 }
@@ -60,9 +57,6 @@ export async function getPost(req, res, next){
         }
         sendResponse(post, 200, res)
     } catch (error) {
-        if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return next (new ErrorResponse("CastError: invalid post id", 500))
-        }
         next(error)
     } 
 }
@@ -80,9 +74,6 @@ export async function updatePost(req, res, next) {
 
         sendResponse(post, 200, res)
     } catch (error) {
-        if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return next(new ErrorResponse("CastError: invalid post id", 500))
-        }
         next(error)
     }
 }
@@ -97,9 +88,6 @@ export async function deletePost (req, res, next) {
 
         sendResponse("post successfully deleted", 200, res)
     } catch (error) {
-        if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return next(new ErrorResponse("CastError: invalid post id", 500))
-        }
         next(error)
     }
 }
